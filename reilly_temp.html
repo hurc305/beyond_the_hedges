@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Trill City</title>
+  <meta name="description" content=“Alexs map of houston music videos”>
+  <meta name="author" content="Alex Tarr">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
+  <![endif]-->
+	  
+  <style>
+    html, body {width:100%; height:100%; padding: 0; margin: 0;}
+    #cartodb-map { width: 100%; height:100%; background: black;}
+  </style>
+
+  <script>
+    var map;
+    function init(){
+      // initiate leaflet map
+      map = new L.Map('cartodb-map', { 
+        center: [29.7022722,-95.428728],
+        zoom: 14
+      })
+	  
+  // Add a basemap to the map object just created
+      L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
+          attribution: 'Stamen'
+          }).addTo(map);
+	  
+      var layerUrl = 'https://rrb5.cartodb.com/api/v2/viz/e95984b4-971e-11e5-8abb-0ef7f98ade21/viz.json';
+	  
+    
+    cartodb.createLayer(map, layerUrl)
+      .addTo(map)
+      .on('done', function(layer) {
+      }).on('error', function() {
+        //log the error
+      });
+    }
+  </script>
+
+</head>
+
+<body onload="init()">
+
+<div id='cartodb-map'></div>
+
+</body>
+</html>
