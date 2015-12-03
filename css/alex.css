@@ -1,0 +1,16 @@
+.layer_selector > p {
+	font-weight: bold;
+	font-size: 190%;
+	color: #fc31c3;
+	padding: 14px 14px 12px 14px;
+	cursor: pointer;
+	border-bottom: 3px solid #1bc404;
+}
+
+#slides_container {
+	background-color: rgba(119, 210, 255, 1);
+}
+
+#slides_container {
+	left: 5px;
+}

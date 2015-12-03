@@ -49,4 +49,4 @@
 
 /* -- CSS to Hack Slides and hide the h4/h5 used for storing the show/hide layers --*/
 			
-h5,h4 {display:none;}
+.selected_slide h5,h4 {display:none;}
