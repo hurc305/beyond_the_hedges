@@ -1,0 +1,9 @@
+.leaflet-layer.leaflet-map-pane, .leaflet-tile, .leaflet-marker-icon, .leaflet-marker-shadow, .leaflet-tile-pane, .leaflet-tile-container, .leaflet-overlay-pane, .leaflet-shadow-pane, .leaflet-marker-pane, .leaflet-popup-pane, .leaflet-overlay-pane svg, .leaflet-zoom-box, .leaflet-image-layer, .leaflet-layer 
+{
+	background:black;
+}
+.cartodb-popup-content > h2
+{
+	font-weight:bold;
+	font-size: 140%;
+}
