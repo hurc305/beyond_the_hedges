@@ -1,0 +1,27 @@
+#slides_container {
+	top: 300px;
+    left: 40px;
+    width: 90%;
+    padding: 10 20px 0 10;
+}
+ul#navButtons {
+    position: absolute;
+    margin: 0 0 0 0; 
+    right: 10px;
+    bottom: 10px;
+}
+
+div.cartodb-legend-stack {
+	position: absolute;
+    top: 35px;
+    left: 20px;
+    bottom: auto;
+    right: auto;
+}
+
+#dots {
+    margin: 0 0 0 0; 
+    position: absolute;
+    right: 12px;
+    bottom: 1px;
+}
