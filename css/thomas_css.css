@@ -2,8 +2,16 @@
 {
 	background:black;
 }
-.cartodb-popup-content > h2
+.cartodb-popup-content, .cartodb-popup > h2
 {
 	font-weight:bold;
 	font-size: 140%;
+}
+.photo > #popvideo
+{
+	display:none;
+}
+.video > #popphoto
+{
+	display:none;
 }
