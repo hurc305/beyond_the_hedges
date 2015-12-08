@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="http://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/themes/css/cartodb.css">
   <link rel="stylesheet" href="http://cartodb.github.io/odyssey.js/sandbox/css/slides.css">
   <link rel="stylesheet" href="css/custom_style.css" type="text/css" media="screen">
-  <link rel="stylesheet" href="css/alex.css" type="text/css" media="screen">
+ 
   
   <script src="http://cartodb.github.io/odyssey.js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
@@ -133,7 +133,7 @@
       init: function() {
 		var seq = O.Triggers.Sequential();
 
-        var baseurl = this.baseurl = 'http://{s}.api.cartocdn.com/base-light/{z}/{x}/{y}.png';
+        var baseurl = this.baseurl = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
         var map = this.map = L.map('map').setView([0, 0.0], 4);
         var basemap = this.basemap = L.tileLayer(baseurl, {
           attribution: 'data OSM - map CartoDB'
@@ -168,7 +168,7 @@
         this.story.clear();
 
         if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
-          this.baseurl = actions.global.baseurl || 'http://0.api.cartocdn.com/base-light/{z}/{x}/{y}.png';
+          this.baseurl = actions.global.baseurl || 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 
           this.basemap.setUrl(this.baseurl);
         }
@@ -344,14 +344,16 @@
 ```
 -title: "THIS SHOULD BE A DIFFERENT TITLE"
 -author: "Brian McGee"
-- vizjson: "https://alextarr.cartodb.com/api/v2/viz/ff1be026-985e-11e5-90e5-0ecfd53eb7d3/viz.json"
+- vizjson: "https://kweimer.cartodb.com/api/v2/viz/7f69a190-9de2-11e5-a7c9-0ecfd53eb7d3/viz.json"
 ```
 
 #Lorem Ipsum (title page)
 #### 0
 ##### 1
 ##### 2
-![banana](http://images.all-free-download.com/images/graphicthumb/banana_310735.jpg) Lorem ipsum dolor sit amet, **consectetur adipiscing elit.** Nam sollicitudin porta sagittis. *In vitae mattis ante.* Suspendisse eu libero lorem. Mauris 	mattis facilisis nisi. Aenean magna tellus, accumsan in suscipit nec, dictum in erat. Duis sed efficitur sapien, sed vehicula ex. Etiam sit amet mattis nisi. Donec non enim tincidunt, porttitor nulla congue, ultrices leo. Cras tellus eros, malesuada semper nulla ut, pellentesque pharetra mauris. Integer sed consequat arcu.
+Welcome to my map.
+![photo](http://thebuzzmagazines.com/sites/default/files/article-photos/2015/05/flood%204.jpg)
+this is some text.
 
 #Phasellus varius
 ```
