@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="http://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/themes/css/cartodb.css">
   <link rel="stylesheet" href="http://cartodb.github.io/odyssey.js/sandbox/css/slides.css">
   <link rel="stylesheet" href="css/custom_style.css" type="text/css" media="screen">
-  <link rel="stylesheet" href="css/alex.css" type="text/css" media="screen">
   
   <script src="http://cartodb.github.io/odyssey.js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
@@ -126,6 +125,7 @@
 		$('#lselect ul').append('<li class="layer-toggle" id ='+l_id+'>'+lname+'<span style = "font-size:80%; color:gray;"> ('+l_id+')</span></li>');
 		$('#'+l_id).click(function(){
 			slayer.toggle();
+			$(this).toggleClass("selected");
 		});
 	}
 
@@ -169,7 +169,7 @@
 
         if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
           this.baseurl = actions.global.baseurl || 'http://0.api.cartocdn.com/base-light/{z}/{x}/{y}.png';
-
+		  alert(this.baseurl);
           this.basemap.setUrl(this.baseurl);
         }
 
@@ -188,15 +188,6 @@
               cartodb.createLayer(self.map, vizjson)
                 .done(function(layer) {
 				  self.cartoDBLayer = layer;
-				  
-				  /*
-				  var scount = layer.getSubLayerCount();
-				  for (i=0; i<scount; i++){
-					  lname = layer.layers[i].options.layer_name;
-					  sublayers.push(i);
-					  layer.getSubLayer(i).hide();
-				  };
-				  */
 				  
 				  //add information to layer selector
 				  layerCount += 1
@@ -344,7 +335,8 @@
 ```
 -title: "THIS SHOULD BE A DIFFERENT TITLE"
 -author: "Brian McGee"
-- vizjson: "https://alextarr.cartodb.com/api/v2/viz/ff1be026-985e-11e5-90e5-0ecfd53eb7d3/viz.json"
+-vizjson: "https://alextarr.cartodb.com/api/v2/viz/ff1be026-985e-11e5-90e5-0ecfd53eb7d3/viz.json"
+-baseurl: "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
 ```
 
 #Lorem Ipsum (title page)
