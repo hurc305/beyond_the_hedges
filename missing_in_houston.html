@@ -26,13 +26,6 @@
     <div id="slides"></div>
   </div>
 
-<!-- layer selector div that is populated when layer loads-->
-<div id="lselect" class="layer_selector">
-			<p>LAYERS</p>
-            <ul class="LayerSelector-list">
-            </ul>
-        </div>
-
   <div id="credits">
     <span class="title" id="title">Beyond The Hedges</span>
     <span class="author"><strong id="author">HURC305 | Fall 2015</strong> <a href="http://cartodb.github.io/odyssey.js/">Odyssey.js</a><span>
@@ -196,14 +189,14 @@ toggleLayer = function toggleLayer() {
         this.story.clear();
 
         if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
-          this.baseurl = actions.global.baseurl || 'http://0.api.cartocdn.com/base-light/{z}/{x}/{y}.png';
+          this.baseurl = actions.global.baseurl || 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
 
           this.basemap.setUrl(this.baseurl);
         }
 
-        var layerUrls = ['https://arazh1123.cartodb.com/api/v2/viz/e4bc86c2-7e78-11e5-8057-0ecfd53eb7d3/viz.json',
-						 'https://xd6.cartodb.com/api/v2/viz/749918f8-7e7b-11e5-83c6-0e5db1731f59/viz.json',
-   						'https://tjw8.cartodb.com/api/v2/viz/dfb862fe-7e78-11e5-aa35-0e5db1731f59/viz.json'
+        var layerUrls = ['https://racheljgalton.cartodb.com/api/v2/viz/19d544ee-9539-11e5-8857-0e674067d321/viz.json',
+						 'https://racheljgalton.cartodb.com/api/v2/viz/e34906d6-9ec5-11e5-ac7a-0ecd1babdde5/viz.json',
+   						'https://racheljgalton.cartodb.com/api/v2/viz/5eed35c0-6161-11e5-9095-0e853d047bba/viz.json'
     					  ];
   	   		     var layerCount = 0;
 		
@@ -313,50 +306,101 @@ toggleLayer = function toggleLayer() {
 -->
 <script id="md_template" type="text/template">
 ```
--title: "THIS SHOULD BE A DIFFERENT TITLE"
--author: "Brian McGee"
+-title: "Missing in Houston"
+-author: "Rachel Galton"
 - vizjson: "https://alextarr.cartodb.com/api/v2/viz/ff1be026-985e-11e5-90e5-0ecfd53eb7d3/viz.json"
 ```
 
-#Lorem Ipsum (title page)
+#Missing in Houston
 ```
-- center: [32.36140331527543, -83.25439453125]
-- zoom: 6
+- center: [29.74589783319499, -95.36476135253906]
+- zoom: 11
+```
+#### 0,3
+
+![houston parking lots](http://i.imgur.com/CLl2eiJ.png) What's missing in Houston? Houston is a city known for its copious amounts of space, as 6 of the other major U.S. cities, including Chicago and San Francisco, can fit inside Houston's land mass. The maps are clear--Houston is a very big and sprawling space. Yet the map represents a concept of what *is* rather than what is not. Though map readers can understand the spaces that constitute the city of Houston, they do not demonstrate the spaces within those boundaries that are in fact "antispaces, making no positive contribution to the surrounding or users" (Trancik 4). This photo of downtown Houston from the late 20th century shows the majority of Houston as an antispace of parking lots, hardly feeling urban at all. Though Houston is one of the largest cities in the United States, both its downtown and outlying areas have long had these gaps in urban space. These antispaces inform how we think about Houston and what the city is and could be. [Trancik, Roger. Finding Lost Space: Theories of Urban Design. Van Nostrand Reinhold Company, 1986. Print.]
+
+#Streetcar City
+```
+- center: [29.75916172055687, -95.36235809326172]
+- zoom: 13
 ```
 #### 0,0
-![banana](http://images.all-free-download.com/images/graphicthumb/banana_310735.jpg) Lorem ipsum dolor sit amet, **consectetur adipiscing elit.** Nam sollicitudin porta sagittis. *In vitae mattis ante.* Suspendisse eu libero lorem. Mauris 	mattis facilisis nisi. Aenean magna tellus, accumsan in suscipit nec, dictum in erat. Duis sed efficitur sapien, sed vehicula ex. Etiam sit amet mattis nisi. Donec non enim tincidunt, porttitor nulla congue, ultrices leo. Cras tellus eros, malesuada semper nulla ut, pellentesque pharetra mauris. Integer sed consequat arcu.
 
-#Phasellus varius
+![houston street car](http://members.iglou.com/baron/mandell.jpg) The long-standing Houston myth is that it has forever been an automobile-centric city. Because of the way Houston developed with a focus on the highway system, extensive public transit is simply not possible for the region. While the premise about the highway system has certainly held true since the mid-twentieth century, Houston is no stranger to public transit, having boasted an elaborate and extensive streetcar system.
+
+#Streetcar City
 ```
-- center: [32.36140331527543, -83.25439453125]
-- zoom: 6
+- center: [29.75916172055687, -95.36235809326172]
+- zoom: 13
 ```
 ##### 0,0
+#### 1,0
+
+![houston street car] (http://members.iglou.com/baron/harrisburg.jpg) The streetcar system, which clearly was much more extensive than existing and planned MetroRail gradually stopped running between the 1930s and 1950s. is an example of one type of missing space in Houston--lost space, or space that used to exist but no longer does. The erasure of this piece of the history of Houston transportation informs the way we think about the possibilities for moving through the city and perpetuates the  idea that certain spaces have belonged and will always belong to the automobile. For transit riders, these spaces are effectively erased from our map of transit in Houston.
+
+
+#Transit Plans
+```
+- center: [29.759012697864655, -95.36613464355469]
+- zoom: 11
+```
+##### 0,0
+##### 1,0
 #### 0,1
-ac nisi a vehicula. In ultricies laoreet vehicula. Curabitur tortor purus, iaculis et ullamcorper non, porttitor sed felis. Proin mi libero, volutpat ac vehicula eget, porttitor vitae arcu. Pellentesque et scelerisque lacus. Pellentesque id lectus quis mauris feugiat vestibulum sit amet at magna. Nullam luctus metus sit amet augue convallis, eget maximus neque facilisis. Maecenas convallis sem sed neque pulvinar, ac interdum est pellentesque. Cras lobortis, turpis vitae porttitor tincidunt, nisl ipsum dapibus elit, finibus molestie est sapien eu orci. Vestibulum sapien libero, tincidunt nec arcu vitae, sagittis interdum odio. Suspendisse ac est a justo fermentum fringilla.
+#### 0,2
+Fasting forward to the 1970s and 1980s, transit authorities considered major plans for both Rapid Transit and regional rail lines. These rejected plans provide insight into the way Houston could have developed. One can only imagine the difference in the shape and structure of Houston if it were a denser central city with rails branching out instead of the distinctive Houston shape of several large loops connecting the spread out inner ring to the even more sprawling outlying areas. 
 
-
-#Quisque ullamcorper
+#Transit Plans
 ```
-- center: [32.36140331527543, -83.25439453125]
-- zoom: 5
+- center: [29.759012697864655, -95.36613464355469]
+- zoom: 11
 ```
-#### 0,0
 ##### 0,1
-consectetur convallis. Suspendisse non risus id sem laoreet convallis. Ut tincidunt nisl metus, vel porttitor ante varius a. Morbi dapibus non tellus quis consectetur. Duis ut tempus ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed non arcu imperdiet, vulputate tellus id, tincidunt augue.
-
-Etiam ullamcorper porttitor nunc vitae ultricies. Curabitur id felis eget metus convallis tempus. Duis sodales est sit amet neque gravida, sed placerat nulla vehicula. Donec dolor tellus, rutrum at iaculis eget, egestas vel dolor. Donec porta tristique efficitur. Curabitur ultrices odio eu auctor sodales. Vivamus tincidunt libero vitae augue consectetur, at convallis quam fermentum. Praesent mauris urna, suscipit sed convallis id, tristique vitae massa. In sagittis metus sem, et gravida nibh finibus non.
-
-
-#Proin sollicitudin
-```
-- center: [32.36140331527543, -83.25439453125]
-- zoom: 5
-```
-#### 0,0
-#### 0,1
 ##### 0,2
-venenatis ante, et lobortis ante dictum eget. Curabitur tristique efficitur erat ut maximus. Donec ultrices ante consequat accumsan scelerisque. Integer ut sem blandit, ornare justo eget, eleifend eros. Nam egestas aliquet augue eu finibus. Nulla facilisi. Proin eros nulla, euismod sit amet justo non, efficitur euismod diam. Phasellus aliquet, leo ut gravida viverra, ex dolor fermentum arcu, non mattis risus eros pretium erat.
+#### 1,1
+#### 1,2
+These plans demonstrate a second type of missing space in Houston: space that was proposed or planned but never existed. These spaces represent the possibility of a different Houston. These spaces are lost to specific actors. Those suburban dwellers who benefited from the highway expansion saw their personal relationship to space in Houston expand dramatically, while Houston transit riders lost the potential of access to new spaces. Ironically, the same debates over the same spaces played out again in 2012, with suburban voters again voting to allocate more money to highway expansion than public transit (Shelton 2014). [Shelton, Kyle. “What Old Transit Maps Can Teach Us About a City’s Future.” CityLab, October 10, 2014. http://www.citylab.com/commute/2014/10/what-old-transit-maps-can-teach-us-about-a-citys-future/381149/.]
+
+#Missing spaces
+```
+- center: [29.76318524947452, -95.36115646362305]
+- zoom: 13
+```
+#### 1,0
+#### 1,1
+#### 1,2
+##### 0,3
+Maps often reveal what is in a space rather than what is not. Yet there is as much meaning in what is not in a space as what is. Maps can show food stores, but they usually do not show food deserts. Though a food desert may be defined by a lack of something, it is still equally a space. What is not a downtown skyscraper is a parking or vacant lot. Often, spaces are missing for specific groups. An area where there are no gender-neutral bathrooms effectively erases those buildings off the map for transgender people who need those spaces. Mapping where there are *not* bike lanes could indicate spaces and streets that effectively do not exist for those riding on two wheels. By erasing parts of maps, we can begin to see the spaces that various users see. By looking at missing transit in Houston, we can begin to see the gulf between past actualized and imagined possibilities and the current day situation. Though the typical map would clearly delineate these streets and areas as spaces, we ought to be asking: spaces for whom? By mapping what is missing, we can begin to imagine how these spaces might be re-appropriated.
+
+#Tactical Urbanism
+```
+- center: [29.754541914052, -95.36991119384766]
+- zoom: 12
+```
+##### 0,3
+##### 1,1
+##### 1,2
+##### 1,0
+#### 2,0
+#### 2,1
+#### 2,2
+
+![tacturb](https://kpbs.media.clients.ellingtoncms.com/img/photos/2014/03/13/Sign_Picture_t1200.jpg?57a0c2296240c280e9492005c3cad63e7cbe80f4)
+Tactical urbanism is defined as “a city and/or citizen-led approach to neighbourhood building using short-term, low-cost, and scaleable interventions intended to catalyse long term change” (Lydon and Garcia 2015). These urban interventions draw attention to spaces thatare neglected or misused. Tactical urbanists use temporary installations to draw attention to this lost space and reappropriate it to benefit citizens. These interventions, such as ‘chair-bombing,’ in which activists put chairs in spaces that lack public seating, take advantage of both unappropriated spaces like “vacant lots, empty storefronts, overly wide streets, highway underpasses, surface parking lots, and other underused public spaces” as well as what they perceive to be misappropriated spaces, like car-centric intersections that need “guerilla crosswalks” or streets that could be appropriated for play (Lydon and Garcia 6). Before Lydon and Garcia of the Streets Plan Collaborative formally deemed this process “tactical urbanism,” other activists for centuries had been causing disruptions and seeking to redefine public spaces (Hou). Lydon and Garcia describe these movements as “the latest response to our basic human instincts: incremental and self-directed action toward increasing social capital, economic opportunity, access to food, safety from natural and human enemies, and general livability” (Lydon and Garcia 25). Transit is only one example of a case study of missing space in Houston, but tactical urbanists draw attention to others. Tactical urbanists respond to a large variety of different needs, like repurposing old billboards into swingsets or reappropriating parking spaces for activities like  mini-golf or yoga. [Lydon, Mike, and Anthony Garcia. Tactical Urbanism. Island Press, 2015. Print.]
+
+#Tactical Urbanism
+```
+- center: [29.78493931022944, -95.39703369140625]
+- zoom: 12
+```
+##### 1,1
+##### 1,2
+#### 2,0
+#### 2,1
+#### 2,2
+![tacturb](http://api.ning.com/files/XYiv7fIdv4jU18TG0ZJL46vbLxsjoDEUcGbeEtyorHy9ELDuJzaq92UqqJBH-9-q-zj5usWuv9ZAmGsqEAjyw*N3fuGpRZYN/PARK_ing_DAY2012.jpg)
+Tactical urbanist efforts are a way to remedy what is “missing” in a city. Anti-mapping, or mapping the spaces that are “missing” in whatever sense of the word, is perhaps a tactical urbanist effort. Garcia and Lydon describe their method “visually demonstrating the possibility of change” (Lydon and Garcia 12).  This map draws attention to just one case study of missing space in Houston and invites viewers to consider how they might interact differently with the built environment of Houston. Viewers are invited to make their own suggestions for spaces that could be anti-mapped in order incite Houstonians to consider the appropriation and use of space in the city. Feedback and ideas are welcome at rjg9@rice.edu.
 </script>
 
 </body></html>
