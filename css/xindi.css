@@ -1,8 +1,10 @@
+/* This is custom CSS for Rich Lifestlye **/
 #slides_container {
-	top: 300px;
+	top: 400px;
     left: 40px;
     width: 90%;
     padding: 10 20px 0 10;
+    background-color: beige;
 }
 ul#navButtons {
     position: absolute;
@@ -12,9 +14,9 @@ ul#navButtons {
 }
 
 div.cartodb-legend-stack {
-	position: absolute;
-    top: 35px;
-    left: 20px;
+    position: absolute;
+    top: 9px;
+    left: 40px;
     bottom: auto;
     right: auto;
 }
@@ -24,4 +26,28 @@ div.cartodb-legend-stack {
     position: absolute;
     right: 12px;
     bottom: 1px;
+}
+div.cartodb-tooltip {
+	z-index: 20;
+}
+.layer_selector {
+    width: 130px;
+}
+.layer_selector > p { 
+    background-color: lavender;
+}
+
+#slides_container h1, #slides_container h2, #slides_container h3, #slides_container h4, #slides_container h5, #slides_container h6 {
+    font-family: 'Proxima N W01 Bold', Sans-serif;
+    color: #333;
+    font-size: 40px;
+}
+#slides_container h1:after, #slides_container h2:after, #slides_container h3:after, #slides_container h4:after, #slides_container h5:after, #slides_container h6:after {
+    display: block;
+    margin: 5px 0 20px 0;
+    height: 3px;
+    content: " ";
+    text-shadow: none;
+    background-color: #333;
+    width: 100%;
 }

@@ -30,7 +30,7 @@
 
 <!-- layer selector div that is populated when layer loads-->
 <div id="lselect" class="layer_selector">
-			<p>LAYERS</p>
+      <p>LAYERS</p>
             <ul class="LayerSelector-list">
             </ul>
         </div>
@@ -47,7 +47,7 @@
   //----GLOBAL VARIABLES-----\\
   var sublayers = [];
   var layerCount = 0;
-	var resizePID;
+  var resizePID;
     function clearResize() {
       clearTimeout(resizePID);
       resizePID = setTimeout(function() { adjustSlides(); }, 100);
@@ -95,7 +95,7 @@
         }
       });
     });
-	
+  
     function click(el) {
       var element = O.Core.getElement(el);
       var t = O.Trigger();
@@ -106,17 +106,17 @@
       if (element) element.onclick = click;
       return t;
     };
-	
-	// function to add HTML to layer selector
-	function createSelector(l_id,lname,slayer){
-		$('#lselect ul').append('<li class="layer-toggle" id ='+l_id+'>'+lname+'<span style = "font-size:80%; color:gray;"> ('+l_id+')</span></li>');
-		$('#'+l_id).click(function(){
-			slayer.toggle();
-		});
-	}
+  
+  // function to add HTML to layer selector
+  function createSelector(l_id,lname,slayer){
+    $('#lselect ul').append('<li class="layer-toggle" id ='+l_id+'>'+lname+'<span style = "font-size:80%; color:gray;"> ('+l_id+')</span></li>');
+    $('#'+l_id).click(function(){
+      slayer.toggle();
+    });
+  }
     O.Template({
       init: function() {
-		var seq = O.Triggers.Sequential();
+    var seq = O.Triggers.Sequential();
         var baseurl = this.baseurl = 'http://{s}.api.cartocdn.com/base-light/{z}/{x}/{y}.png';
         var map = this.map = L.map('map').setView([0, 0.0], 4);
         var basemap = this.basemap = L.tileLayer(baseurl, {
@@ -125,14 +125,14 @@
         // enanle keys to move
         O.Keys().on('map').left().then(seq.prev, seq)
         O.Keys().on('map').right().then(seq.next, seq)
-		
-		//log lat and lon of mouse click on map -- can/should be disabled
-		map.on('click', function(e) {
-		    console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
-			console.log("Zoom: " + this.getZoom());
-		});
+    
+    //log lat and lon of mouse click on map -- can/should be disabled
+    map.on('click', function(e) {
+        console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
+      console.log("Zoom: " + this.getZoom());
+    });
         
-		click(document.querySelectorAll('.next')).then(seq.next, seq)
+    click(document.querySelectorAll('.next')).then(seq.next, seq)
         click(document.querySelectorAll('.prev')).then(seq.prev, seq)
         var slides = O.Actions.Slides('slides');
         var story = O.Story()
@@ -142,7 +142,7 @@
         this.progress = O.UI.DotProgress('dots').count(0);
       },
       update: function(actions) {
-		var self = this;
+    var self = this;
         if (!actions.length) return;
         this.story.clear();
         if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
@@ -151,87 +151,87 @@
         }
         if (this.cartoDBLayer && ("http://"+self.cartoDBLayer.options.user_name+".cartodb.com/api/v2/viz/"+self.cartoDBLayer.options.layer_definition.stat_tag+"/viz.json" !== actions.global.vizjson)) {
           this.map.removeLayer(this.cartoDBLayer);
-		  //alert("map removed?");
+      //alert("map removed?");
           this.cartoDBLayer = null;
           this.created = false;
         }
-		
+    
         if (actions.global.vizjson && !this.cartoDBLayer) {
           if (!this.created) { // sendCode debounce < vis loader
             cdb.vis.Loader.get(actions.global.vizjson, function(vizjson) {
               self.map.fitBounds(vizjson.bounds);
               cartodb.createLayer(self.map, vizjson)
                 .done(function(layer) {
-				  self.cartoDBLayer = layer;
-				  
-				  /*
-				  var scount = layer.getSubLayerCount();
-				  for (i=0; i<scount; i++){
-					  lname = layer.layers[i].options.layer_name;
-					  sublayers.push(i);
-					  layer.getSubLayer(i).hide();
-				  };
-				  */
-				  
-				  //add information to layer selector
-				  layerCount += 1
-				  for (var i = 0; i < layer.getSubLayerCount(); i++) {
-					  var sublayer = {
-						  				id:"",
-						  				name:"",
-						  				author:"",
-						  				slayer:"",
-						  				parent:""
-						  				
-					  }
-					  sublayer.slayer = layer.getSubLayer(i);
-					  sublayer.id = layerCount+"_"+i;
-					  sublayer.name = layer.options.layer_definition.layers[i].options.layer_name;
-					  sublayer.author = "Bob";	//TODO: Make this author's name
-					  createSelector(sublayer.id,sublayer.name,sublayer.slayer);
-					  //sublayer.slayer.hide();
-						
-					  //add layer to the sublayers array
-					  sublayers.push(i);		
-							}
-				  
-				 // ADDED an action to the O.Parallel actions under _resetActions below
-				 // This is probably not an ideal hack, but avoids having to dig into the Odyssey.JS source code
-				 // uses CSS to hide h5 elements from the markdown (#####) where visible layers are stored
-				 // jQuery used to retrieve the values and compare them against the  array of sublayers
- 				 toggleLayer = function toggleLayer() {
- 				    return O.Action({
- 				      enter: function() {
- 						  /*
-						  layer.getSubLayer(tl).show();
-						  var lhide;
-						  for (lhide in sublayers){
-							  if (lhide != tl){layer.getSubLayer(lhide).hide();};
-						  }*/
-						  var vlayers = $(".selected_slide h4");
-						  var hlayers = $(".selected_slide h5");
-						  vlayers.each(function(){
-							  tl = $(this).text();
-							  layer.getSubLayer(tl).show();
-							  console.log(tl);
-						  });
-						  hlayers.each(function(){
-							  tl = $(this).text();
-							  layer.getSubLayer(tl).hide();
-							  console.log(tl);
-						  });
-					  }
- 				    });
- 				  }
-				/*  
-				var sublayer = layer.getSubLayer(0),
+          self.cartoDBLayer = layer;
+          
+          /*
+          var scount = layer.getSubLayerCount();
+          for (i=0; i<scount; i++){
+            lname = layer.layers[i].options.layer_name;
+            sublayers.push(i);
+            layer.getSubLayer(i).hide();
+          };
+          */
+          
+          //add information to layer selector
+          layerCount += 1
+          for (var i = 0; i < layer.getSubLayerCount(); i++) {
+            var sublayer = {
+                      id:"",
+                      name:"",
+                      author:"",
+                      slayer:"",
+                      parent:""
+                      
+            }
+            sublayer.slayer = layer.getSubLayer(i);
+            sublayer.id = layerCount+"_"+i;
+            sublayer.name = layer.options.layer_definition.layers[i].options.layer_name;
+            sublayer.author = "Bob";  //TODO: Make this author's name
+            createSelector(sublayer.id,sublayer.name,sublayer.slayer);
+            //sublayer.slayer.hide();
+            
+            //add layer to the sublayers array
+            sublayers.push(i);    
+              }
+          
+         // ADDED an action to the O.Parallel actions under _resetActions below
+         // This is probably not an ideal hack, but avoids having to dig into the Odyssey.JS source code
+         // uses CSS to hide h5 elements from the markdown (#####) where visible layers are stored
+         // jQuery used to retrieve the values and compare them against the  array of sublayers
+         toggleLayer = function toggleLayer() {
+            return O.Action({
+              enter: function() {
+              /*
+              layer.getSubLayer(tl).show();
+              var lhide;
+              for (lhide in sublayers){
+                if (lhide != tl){layer.getSubLayer(lhide).hide();};
+              }*/
+              var vlayers = $(".selected_slide h4");
+              var hlayers = $(".selected_slide h5");
+              vlayers.each(function(){
+                tl = $(this).text();
+                layer.getSubLayer(tl).show();
+                console.log(tl);
+              });
+              hlayers.each(function(){
+                tl = $(this).text();
+                layer.getSubLayer(tl).hide();
+                console.log(tl);
+              });
+            }
+            });
+          }
+        /*  
+        var sublayer = layer.getSubLayer(0),
                       layer_name = layer.layers[0].options.layer_name,
                       filter = actions.global.cartodb_filter ? " WHERE "+actions.global.cartodb_filter : "";
-					  
-			 	sublayer.setSQL("SELECT * FROM "+layer_name+filter);
-				sublayer.hide();
+            
+        sublayer.setSQL("SELECT * FROM "+layer_name+filter);
+        sublayer.hide();
                 */  
-				  self.map.addLayer(layer);
+          self.map.addLayer(layer);
                   self._resetActions(actions);
                 }).on('error', function(err) {
                   console.log("some error occurred: " + err);
@@ -251,25 +251,25 @@
         document.getElementById('author').innerHTML = author_;
         document.title = title_ + " | " + author_ +' Odyssey.js';
         var sl = actions;
- 	   
+     
         document.getElementById('slides').innerHTML = ''
         this.progress.count(sl.length);
         // create new story
         for(var i = 0; i < sl.length; ++i) {
           var slide = sl[i];
           var tmpl = "<div class='slide' style='diplay:none'>";
-		  
+      
           tmpl += slide.html();
           tmpl += "</div>";
           document.getElementById('slides').innerHTML += tmpl;
           this.progress.step(i).then(this.seq.step(i), this.seq)
-		  //var visible_layer = i;//temporary, this should be set to layer from viz.json
+      //var visible_layer = i;//temporary, this should be set to layer from viz.json
           var actions = O.Parallel(
             this.slides.activate(i),
             slide(this),
             this.progress.activate(i),
             resizeAction,
-			toggleLayer()
+      toggleLayer()
           );
           actions.on("finish.app", function() {
             adjustSlides();
@@ -280,14 +280,14 @@
           )
         }
         this.story.go(this.seq.current());
-	  	
-		
-	    
-		},
+      
+    
+      
+    },
       changeSlide: function(n) {
         this.seq.current(n);
       }
-	}	); 
+  } ); 
   </script>
 
   <script>
@@ -305,20 +305,22 @@
 ```
 -title: "Rich Lifestyle"
 -author: "Xindi Duan"
-- vizjson: "https://xd6.cartodb.com/api/v2/viz/3f4ad5ce-92fd-11e5-a60c-0ecd1babdde5/viz.json"
+- vizjson: "https://xd6.cartodb.com/api/v2/viz/101584da-9f72-11e5-b4bd-0e674067d321/viz.json"
 ```
 
 #Rich Lifestyle (title page)
 ```
-- center: [29.75409482470163, -95.41299819946289]
-- zoom: 13
+- center: [29.550851, -95.412282]
+- zoom: 10
 ```
+
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sollicitudin porta sagittis. In vitae mattis ante. Suspendisse eu libero lorem. Mauris mattis facilisis nisi. Aenean magna tellus, accumsan in suscipit nec, dictum in erat. Duis sed efficitur sapien, sed vehicula ex. Etiam sit amet mattis nisi. Donec non enim tincidunt, porttitor nulla congue, ultrices leo. Cras tellus eros, malesuada semper nulla ut, pellentesque pharetra mauris. Integer sed consequat arcu.
+
 
 #Phasellus varius
 ```
-- center: [32.02670629333614, -97.943115234375]
-- zoom: 6
+- center: [(29.760427, -95.369803)]
+- zoom: 10
 ```
 #### 2
 ac nisi a vehicula. In ultricies laoreet vehicula. Curabitur tortor purus, iaculis et ullamcorper non, porttitor sed felis. Proin mi libero, volutpat ac vehicula eget, porttitor vitae arcu. Pellentesque et scelerisque lacus. Pellentesque id lectus quis mauris feugiat vestibulum sit amet at magna. Nullam luctus metus sit amet augue convallis, eget maximus neque facilisis. Maecenas convallis sem sed neque pulvinar, ac interdum est pellentesque. Cras lobortis, turpis vitae porttitor tincidunt, nisl ipsum dapibus elit, finibus molestie est sapien eu orci. Vestibulum sapien libero, tincidunt nec arcu vitae, sagittis interdum odio. Suspendisse ac est a justo fermentum fringilla.
@@ -326,8 +328,8 @@ ac nisi a vehicula. In ultricies laoreet vehicula. Curabitur tortor purus, iacul
 
 #Quisque ullamcorper
 ```
-- center: [29.782257558129434, -95.34759521484375]
-- zoom: 10
+- center: [29.750851, -95.412282]
+- zoom: 13
 ```
 #### 1
 ##### 2
