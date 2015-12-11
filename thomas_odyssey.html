@@ -1,7 +1,7 @@
 <!doctype><html><head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>HURC305 Template</title>
+  <title>Houston's Lindy Hop Embassies</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -21,13 +21,15 @@
            <div class="cartodb-popup-content-wrapper">
              <div class="cartodb-popup-content">
                <!-- content.data contains the field info -->
-			   <div class=pleasework>
+			   <div class={{content.data.media_type}}>
 					<iframe id="popvideo" width="260" height="190" src={{content.data.media}} frameborder="0" allowfullscreen></iframe>
-					<div id="popphoto"><a href = {{content.data.media}} target="_blank"><img width="260" height="190" src ={{content.data.media}}></a> click image to view large
+					<div id="popphoto">
+						<a href = {{content.data.media}} target="_blank"><img width="260" height="190" src ={{content.data.media}}></a> 
+						<p>click image to view large </p>
 					</div>
 				</div>
-			   <h2 style="text-align:center">{{content.data.name}} {{content.data.name}}</h2>
-			   <p>{{content.data.description}} {{content.data.media_type}}</p>
+			   <h2 style="text-align:center">{{content.data.name}}</h2>
+			   <p>{{content.data.description}}</p>
              </div>
            </div>
            <div class="cartodb-popup-tip-container"></div>
@@ -392,7 +394,7 @@
 #### 0
 #### 1
 #### 2
-Lindy Hop is a form of swing dancing that was born in the late 1920s. In this map, we will explore the Lindy Hop dancing venues and cultures that lie hidden in the spaces of businesses and regions of Houston. Each of these venues has its own people, environment, and role in the Lindy Hop scene in Houston and has helped shape my perspective and helps define the space that is Houston.
+Lindy Hop is a form of swing dancing that was born in the late 1920s. In this map, we will explore the Lindy Hop dancing venues and cultures that lie hidden in the spaces of businesses and regions of Houston. Each of these venues has its own people, environment, and role in the Lindy Hop scene in Houston and has helped shape my perspective and helps define for me the space that is Houston. Feel free to roam about the map and investigate each venue individually at any time.
 
 #The Eldorado Ballroom
 ```
@@ -427,7 +429,7 @@ In Houston's Lindy Hop scene, The Heights is a surprisingly inactive area. Danci
 - center: [29.75655379144858, -95.51736831665039]
 - zoom: 14
 ```
-In West Houston, one will find practice space, workshop locations, and social dancing spots that gain some popularity once or twice a year that are interspersed throughout the area. As Houston spreads out to the West, so do the dancing venues. 
+In West Houston, one will find practice space, workshop locations, and social dancing spots that gain some popularity once or twice a year that are interspersed throughout the area. As urbanized Houston spreads out to the more suburban West, so do the dancing venues. 
 
 #Royal Sonesta
 ```
@@ -441,7 +443,9 @@ Where other venues might serve as embassies to different areas of Houston, the R
 - center: [29.738743547471575, -95.39291381835938]
 - zoom: 11
 ```
-Lindy Hop gave a sense of personal and bodily freedom to those who first danced it in the 30s and 40s. As we see, Lindy Hop venues of Houston span a great deal of Houston's West and Inner Loop, and give those who participate in the Lindy Hop community in Houston a spacial freedom in exploring the different venues, places, and interests around the city.
+Lindy Hop gave a sense of personal and bodily freedom to those who first danced it in the 30s and 40s. As we see, Lindy Hop venues of Houston span a great deal of Houston's West and Inner Loop, and give those who participate in the Lindy Hop community in Houston a spacial freedom of their own in exploring, experiencing, and re-examining different cultures, places, and interests around the city.
+
+For the full essay pertaining to this map, please visit this link: [Houston's Lindy Hop Embassies] (odyssey_essay.html)
 </script>
 
 </body></html>
