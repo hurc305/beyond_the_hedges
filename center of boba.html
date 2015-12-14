@@ -1,0 +1,394 @@
+<!doctype><html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>HURC305 Template</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/x-icon" href="http://cartodb.github.io/odyssey.js/sandbox/favicon.png">
+  <link rel="icon" type="image/png" href="http://cartodb.github.io/odyssey.js/sandbox/favicon.png">
+
+  <link rel="stylesheet" href="http://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/themes/css/cartodb.css">
+  <link rel="stylesheet" href="http://cartodb.github.io/odyssey.js/sandbox/css/slides.css">
+  <link rel="stylesheet" href="css/custom_style.css" type="text/css" media="screen">
+  
+  <script src="http://cartodb.github.io/odyssey.js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body>
+  <div id="map" style="width: 100%; height: 100%;"></div>
+
+  <div id="slides_container" style="display:block;">
+    <ul id="navButtons">
+      <li><a class="prev"></a></li>
+      <li><a class="next"></a></li>
+    </ul>
+	<div id="dots"></div>
+    <div id="slides"></div>
+  </div>
+
+<!-- layer selector div that is populated when layer loads-->
+<div id="lselect" class="layer_selector">
+			<p>LAYERS</p>
+            <ul class="LayerSelector-list">
+            </ul>
+        </div>
+
+  <div id="credits">
+    <span class="title" id="title">Beyond The Hedges</span>
+    <span class="author"><strong id="author">HURC305 | Fall 2015</strong> <a href="http://cartodb.github.io/odyssey.js/">Odyssey.js</a><span>
+  </span></span></div>
+<a href="odyssey_template.html" id="" title="odyssey_template">odyssey_template</a>
+  <script src="http://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/cartodb.js"></script>
+  <script src="http://cartodb.github.io/odyssey.js/dist/odyssey.js" charset="UTF-8"></script>
+
+  <script>
+  //----GLOBAL VARIABLES-----\\
+  var sublayers = [];
+  var layerCount = 0;
+
+	var resizePID;
+
+    function clearResize() {
+      clearTimeout(resizePID);
+      resizePID = setTimeout(function() { adjustSlides(); }, 100);
+    };
+
+    if (!window.addEventListener) {
+      window.attachEvent("resize", function load(event) {
+        clearResize();
+      });
+    } else {
+      window.addEventListener("resize", function load(event) {
+        clearResize();
+      });
+    };
+
+    function adjustSlides() {
+      var container = document.getElementById("slides_container"),
+          slide = document.querySelectorAll('.selected_slide')[0];
+
+      if (slide) {
+        if (slide.offsetHeight+169+40+80 >= window.innerHeight) {
+          container.style.bottom = "80px";
+
+          var h = container.offsetHeight;
+
+          slide.style.height = h-169+"px";
+          slide.classList.add("scrolled");
+        } else {
+          container.style.bottom = "auto";
+          container.style.minHeight = "0";
+
+          slide.style.height = "auto";
+          slide.classList.remove("scrolled");
+        }
+      }
+    };
+
+    var resizeAction = O.Action(function() {
+      function imageLoaded() {
+        counter--;
+
+        if (counter === 0) {
+          adjustSlides();
+        }
+      }
+      var images = $('img');
+      var counter = images.length;
+
+      images.each(function() {
+        if (this.complete) {
+          imageLoaded.call( this );
+        } else {
+          $(this).one('load', imageLoaded);
+        }
+      });
+    });
+	
+
+    function click(el) {
+      var element = O.Core.getElement(el);
+      var t = O.Trigger();
+
+      //TODO: clean properly
+      function click() {
+        t.trigger();
+      }
+
+      if (element) element.onclick = click;
+
+      return t;
+    };
+	
+	// function to add HTML to layer selector
+	function createSelector(l_id,lname,slayer){
+		$('#lselect ul').append('<li class="layer-toggle" id ='+l_id+'>'+lname+'<span style = "font-size:80%; color:gray;"> ('+l_id+')</span></li>');
+		$('#'+l_id).click(function(){
+			slayer.toggle();
+		});
+	}
+
+    O.Template({
+      init: function() {
+		var seq = O.Triggers.Sequential();
+
+        var baseurl = this.baseurl = 'http://{s}.api.cartocdn.com/base-light/{z}/{x}/{y}.png';
+        var map = this.map = L.map('map').setView([0, 0.0], 4);
+        var basemap = this.basemap = L.tileLayer(baseurl, {
+          attribution: 'data OSM - map CartoDB'
+        }).addTo(map);
+
+        // enanle keys to move
+        O.Keys().on('map').left().then(seq.prev, seq)
+        O.Keys().on('map').right().then(seq.next, seq)
+		
+		//log lat and lon of mouse click on map -- can/should be disabled
+		map.on('click', function(e) {
+		    console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
+			console.log("Zoom: " + this.getZoom());
+		});
+        
+		click(document.querySelectorAll('.next')).then(seq.next, seq)
+        click(document.querySelectorAll('.prev')).then(seq.prev, seq)
+
+        var slides = O.Actions.Slides('slides');
+        var story = O.Story()
+
+        this.story = story;
+        this.seq = seq;
+        this.slides = slides;
+        this.progress = O.UI.DotProgress('dots').count(0);
+      },
+
+      update: function(actions) {
+		var self = this;
+        if (!actions.length) return;
+
+        this.story.clear();
+
+        if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
+          this.baseurl = actions.global.baseurl || 'http://0.api.cartocdn.com/base-light/{z}/{x}/{y}.png';
+
+          this.basemap.setUrl(this.baseurl);
+        }
+
+        if (this.cartoDBLayer && ("http://"+self.cartoDBLayer.options.user_name+".cartodb.com/api/v2/viz/"+self.cartoDBLayer.options.layer_definition.stat_tag+"/viz.json" !== actions.global.vizjson)) {
+          this.map.removeLayer(this.cartoDBLayer);
+		  //alert("map removed?");
+          this.cartoDBLayer = null;
+          this.created = false;
+        }
+		
+        if (actions.global.vizjson && !this.cartoDBLayer) {
+          if (!this.created) { // sendCode debounce < vis loader
+            cdb.vis.Loader.get(actions.global.vizjson, function(vizjson) {
+              self.map.fitBounds(vizjson.bounds);
+
+              cartodb.createLayer(self.map, vizjson)
+                .done(function(layer) {
+				  self.cartoDBLayer = layer;
+				  
+				  /*
+				  var scount = layer.getSubLayerCount();
+				  for (i=0; i<scount; i++){
+					  lname = layer.layers[i].options.layer_name;
+					  sublayers.push(i);
+					  layer.getSubLayer(i).hide();
+				  };
+				  */
+				  
+				  //add information to layer selector
+				  layerCount += 1
+				  for (var i = 0; i < layer.getSubLayerCount(); i++) {
+					  var sublayer = {
+						  				id:"",
+						  				name:"",
+						  				author:"",
+						  				slayer:"",
+						  				parent:""
+						  				
+					  }
+					  sublayer.slayer = layer.getSubLayer(i);
+					  sublayer.id = layerCount+"_"+i;
+					  sublayer.name = layer.options.layer_definition.layers[i].options.layer_name;
+					  sublayer.author = "Bob";	//TODO: Make this author's name
+					  createSelector(sublayer.id,sublayer.name,sublayer.slayer);
+					  sublayer.slayer.hide();
+						
+					  //add layer to the sublayers array
+					  sublayers.push(i);		
+							}
+				  
+				 // ADDED an action to the O.Parallel actions under _resetActions below
+				 // This is probably not an ideal hack, but avoids having to dig into the Odyssey.JS source code
+				 // uses CSS to hide h5 elements from the markdown (#####) where visible layers are stored
+				 // jQuery used to retrieve the values and compare them against the  array of sublayers
+ 				 toggleLayer = function toggleLayer() {
+ 				    return O.Action({
+ 				      enter: function() {
+ 						  /*
+						  layer.getSubLayer(tl).show();
+						  var lhide;
+						  for (lhide in sublayers){
+							  if (lhide != tl){layer.getSubLayer(lhide).hide();};
+						  }*/
+						  var vlayers = $(".selected_slide h4");
+						  var hlayers = $(".selected_slide h5");
+						  vlayers.each(function(){
+							  tl = $(this).text();
+							  layer.getSubLayer(tl).show();
+							  console.log(tl);
+						  });
+						  hlayers.each(function(){
+							  tl = $(this).text();
+							  layer.getSubLayer(tl).hide();
+							  console.log(tl);
+						  });
+					  }
+ 				    });
+ 				  }
+				/*  
+				var sublayer = layer.getSubLayer(0),
+                      layer_name = layer.layers[0].options.layer_name,
+                      filter = actions.global.cartodb_filter ? " WHERE "+actions.global.cartodb_filter : "";
+					  
+			 	sublayer.setSQL("SELECT * FROM "+layer_name+filter);
+				sublayer.hide();
+                */  
+				  self.map.addLayer(layer);
+
+                  self._resetActions(actions);
+                }).on('error', function(err) {
+                  console.log("some error occurred: " + err);
+                });
+            });
+
+            this.created = true;
+          }
+
+          return;
+        }
+
+        this._resetActions(actions);
+      },
+
+      _resetActions: function(actions) {
+        // update footer title and author
+        var title_ = actions.global.title === undefined ? '' : actions.global.title,
+            author_ = actions.global.author === undefined ? 'Using' : 'By '+actions.global.author+' using';
+
+        document.getElementById('title').innerHTML = title_;
+        document.getElementById('author').innerHTML = author_;
+        document.title = title_ + " | " + author_ +' Odyssey.js';
+
+        var sl = actions;
+ 	   
+        document.getElementById('slides').innerHTML = ''
+        this.progress.count(sl.length);
+
+        // create new story
+        for(var i = 0; i < sl.length; ++i) {
+          var slide = sl[i];
+          var tmpl = "<div class='slide' style='diplay:none'>";
+		  
+          tmpl += slide.html();
+          tmpl += "</div>";
+          document.getElementById('slides').innerHTML += tmpl;
+
+          this.progress.step(i).then(this.seq.step(i), this.seq)
+		  //var visible_layer = i;//temporary, this should be set to layer from viz.json
+          var actions = O.Parallel(
+            this.slides.activate(i),
+            slide(this),
+            this.progress.activate(i),
+            resizeAction,
+			toggleLayer()
+          );
+
+          actions.on("finish.app", function() {
+            adjustSlides();
+          });
+
+          this.story.addState(
+            this.seq.step(i),
+            actions
+          )
+        }
+
+        this.story.go(this.seq.current());
+	  	
+		
+	    
+		},
+
+      changeSlide: function(n) {
+        this.seq.current(n);
+      }
+	}	); 
+  </script>
+
+  <script>
+    /*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-20934186-21', 'cartodb.github.io');
+    ga('send', 'pageview');*/
+  </script>
+<!-->
+  <script type="text/javascript" src="http://fast.fonts.net/jsapi/3af16084-ba56-49ca-b37d-0b49b59e1927.js"></script>
+-->
+<script id="md_template" type="text/template">
+```
+-title: "Center of Boba"
+-author: "Zack Li"
+- vizjson: "https://zackli.cartodb.com/api/v2/viz/445396c2-6dfb-11e5-9ae3-0e674067d321/viz.json"
+```
+
+#Searching for the Center of Houston
+```
+- center: [29.7730841,-95.4027055]
+- zoom: 11
+```
+#### 0
+### 1
+#### 2
+#### 3
+Simply look at a map of Houston. One will notice that it looks surprisingly reminiscent of a spider web. You will see that there are two rings(the inner loop and the outer loop) looping around what looks like the center of Houston and many lines of roads leaving that “center” linearly. Looking at this map, which shows many roads coming out from a central location, one might be thinked that the middle of the inner circle is the center of Houston. We will explore this idea in one case by specifically looking at Boba shops.
+Looking at the map of Boba shops, it appears that they only exist near the center of the two circles in Houston. However, it also looks like they are clustered slightly to the left of the center of the two circles. This seems to suggest a different center for the city of Houston that is to the left of the inner loop. In fact, looking at the map of population density(City of Houston Population Density), this appears the reaffirm the case, because the population density is centered at a point slightly left of the inner loop and is also the highest there. This is interesting because the way that Houston was built seems to suggest that the center should be inside the inner loop since there are two loops around it and also many roads stemming from it. But, looking at population and Boba locations, it appears the actual center is actually to the left of the inner loop, where the star on the map is. Perhaps there was a mismatch between how people planned the city and how people integrated and set up in the city. 
+ 
+
+#History of Boba
+```
+- center: [29.7412837,-95.5494477]
+- zoom: 11
+```
+#### 2
+So you might be wondering, why is Boba important? What is the significance of finding where all the Boba shops are? Well, Boba is one example of the multiculturalism that exists in Houston. Boba “is a drink that originated in Taiwan in the 1980s and spread throughout Southeast Asia before finding its way to the U.S.”(Christensen). Most people think of Bubble Tea as being synonymous with Boba, but that is not true. In the beginning, Bubble Tea used to be just “cold milk tea that was shaken until frothy”(Christensen). It was one of the most successful and well-received drinks in Taiwan and the popularity of the drinks led to other stores selling Boba springing up everywhere. The inventor could’ve been a millionaire if she chose to patent her invention, but she decided to promote the tea culture instead. The popularity of Boba has led to many fans including the “22-year-old UCLA student” Steven Cong. He has documented “over 124 different boba drinks from around the world”(Wei).  Most of his finds are from his hometown of California and he documents his drinks with pictures and reviews on his Tumblr page that is aptly named Bobaholic. His goal is to create a comprehensive Boba network that includes many places from around the world so people would know where they can find a good Boa restaurant. 
+
+#Real importance of Boba
+```
+- center: [29.7412837,-95.5494477]
+- zoom: 11
+```
+#### 0
+#### 1
+#### 2
+According to Verdin, a race can survive a lot of things, from colonialism, forced migrations, discrimination and disease. However, this does not mean that the culture or spirit is alive (Solnit 19). When new groups immigrate to America, they often leave behind a lot of their past. This can lead to a sense of a loss of a unique identity. By setting up Boba restaurants and visiting them, people of Asian American heritage can experience more of their unique past. It also allows Asian Americans to contribute to the diverse culture in America. Although Boba can be viewed as a special drink that originated from Taiwan, at the same time, it can also be viewed as nothing special at all. Boba can viewed as a stand-in for all the important cultural traditions of different groups of people living in America. It is not Boba itself that is the important thing to focus on, but the idea of keeping a unique piece of self or identity. It is exactly things like this that allow America to have a rich and inclusive culture. 
+
+
+
+#Conclusion
+```
+- center: [29.7730841,-95.4027055]
+- zoom: 10
+```
+### 0
+#### 3
+#### 2
+### 1
+Based on census data from 1990, 2000, and 2010, “The Houston region is now the most ethnically diverse large metropolitan area in the country, surpassing New York City” (Kever). For many people living in Houston, diversity has never been a problem and has in fact been a huge draw for the city. As we can clearly see from the example of Steven Cong, there is a culture around Boba and it helps bring more options for dining and drinks. This is also true for other restaurants, as shown by the large amounts of Mexican restaurants around Houston. This diversity not only helps to attract new migrants to the city, which will help boost the economy, but also helps to make everyone feel more included in the culture. The two main hotspots for Boba in the U.S. are California and Texas, and this may be a small part of the reason why Texas is such a vibrant and diverse city today. 
+</script>
+
+</body></html>
