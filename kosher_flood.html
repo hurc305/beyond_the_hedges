@@ -31,6 +31,7 @@
 <div id="lselect" class="layer_selector">
 			<p>LAYERS</p>
             <ul class="LayerSelector-list">
+				<li class="layer-toggle" id="1_3">FEMA Map</li>
             </ul>
         </div>
 
@@ -46,6 +47,7 @@
   //----GLOBAL VARIABLES-----\\
   var sublayers = [];
   var layerCount = 0;
+  var fema = null;
 
 	var resizePID;
 
@@ -123,9 +125,10 @@
 	
 	// function to add HTML to layer selector
 	function createSelector(l_id,lname,slayer){
-		$('#lselect ul').append('<li class="layer-toggle" id ='+l_id+'>'+lname+'<span style = "font-size:80%; color:gray;"> ('+l_id+')</span></li>');
+		$('#lselect ul').append('<li class="layer-toggle" id ='+l_id+'>'+lname+'</li><div id = "legend_'+l_id+'"></div>');
 		$('#'+l_id).click(function(){
 			slayer.toggle();
+			$( this ).toggleClass("selected");
 		});
 	}
 
@@ -134,7 +137,7 @@
 		var seq = O.Triggers.Sequential();
 
         var baseurl = this.baseurl = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
-        var map = this.map = L.map('map').setView([0, 0.0], 4);
+        var map = this.map = L.map('map').setView([29.675701, -95.47771], 10);
         var basemap = this.basemap = L.tileLayer(baseurl, {
           attribution: 'data OSM - map CartoDB'
         }).addTo(map);
@@ -184,19 +187,11 @@
           if (!this.created) { // sendCode debounce < vis loader
             cdb.vis.Loader.get(actions.global.vizjson, function(vizjson) {
               self.map.fitBounds(vizjson.bounds);
-
+			  
               cartodb.createLayer(self.map, vizjson)
                 .done(function(layer) {
 				  self.cartoDBLayer = layer;
-				  
-				  /*
-				  var scount = layer.getSubLayerCount();
-				  for (i=0; i<scount; i++){
-					  lname = layer.layers[i].options.layer_name;
-					  sublayers.push(i);
-					  layer.getSubLayer(i).hide();
-				  };
-				  */
+				
 				  
 				  //add information to layer selector
 				  layerCount += 1
@@ -227,35 +222,39 @@
  				 toggleLayer = function toggleLayer() {
  				    return O.Action({
  				      enter: function() {
- 						  /*
-						  layer.getSubLayer(tl).show();
-						  var lhide;
-						  for (lhide in sublayers){
-							  if (lhide != tl){layer.getSubLayer(lhide).hide();};
-						  }*/
 						  var vlayers = $(".selected_slide h4");
 						  var hlayers = $(".selected_slide h5");
+						  console.log (vlayers + " is vlayers, " + hlayers + " is hlayers");
 						  vlayers.each(function(){
 							  tl = $(this).text();
+							  if (tl == 3){
+								  //$("#fema").show();
+								  fema.setOpacity(1);
+							  }else{
 							  layer.getSubLayer(tl).show();
-							  console.log(tl);
+						  	  }
+							  b_id = "#1_"+tl;
+							  if (!($(b_id).hasClass("selected"))){ 
+								  $(b_id).addClass("selected");
+							  	}
 						  });
 						  hlayers.each(function(){
-							  tl = $(this).text();
-							  layer.getSubLayer(tl).hide();
-							  console.log(tl);
+							  hl = $(this).text();
+							  if (hl == 3){
+							  	 //$("#fema").hide();
+								  fema.setOpacity(0);
+							  }else{
+							  layer.getSubLayer(hl).hide()
+						  	  }
+							  b_id = "#1_"+hl;;
+							  if (($(b_id).hasClass("selected"))){ 
+								  $(b_id).removeClass("selected");
+							  	}
 						  });
 					  }
  				    });
  				  }
-				/*  
-				var sublayer = layer.getSubLayer(0),
-                      layer_name = layer.layers[0].options.layer_name,
-                      filter = actions.global.cartodb_filter ? " WHERE "+actions.global.cartodb_filter : "";
-					  
-			 	sublayer.setSQL("SELECT * FROM "+layer_name+filter);
-				sublayer.hide();
-                */  
+			 
 				  self.map.addLayer(layer);
 
                   self._resetActions(actions);
@@ -263,8 +262,7 @@
                   console.log("some error occurred: " + err);
                 });
             });
-
-            this.created = true;
+		  this.created = true;
           }
 
           return;
@@ -318,8 +316,19 @@
 
         this.story.go(this.seq.current());
 	  	
+		//custom script to add raster map. NOTE: Leaflet sees this as a second layer on top of the cartoDB layers, but for the selector purposes it has the id 1_3 (so appears as sublayer 3) -- if more than one more sublayer is added to the viz.json, this will break.
+fema = L.tileLayer('http://mapwarper.net/maps/tile/11735/{z}/{x}/{y}.png', {opacity:0});
+fema.addTo(this.map).on('load', function(){
+	(this.getContainer()).setAttribute("id","fema");
 		
-	    
+		$('#1_3').click(function(){
+			if (fema.options.opacity == 0){
+			 fema.setOpacity(1)
+			}else { fema.setOpacity(0);
+			}
+			$( this ).toggleClass("selected");
+			});
+		});
 		},
 
       changeSlide: function(n) {
@@ -383,6 +392,7 @@ Ethnic identity and definition of place are associated with food consumption.  T
 ```
 #### 1
 ##### 0
+##### 3
 Houston’s Jewish community dates from the earliest founding of the city, with a number of European immigrant merchants arriving in the mid-1800s who became major contributors to the economic success of the city.  Jews built the city through their successful businesses and community leadership including the Battlestein, Foley, Sakowitz and Weingarten families, as well as Ben Taub, Mitchell Westheimer, Henry Dannenbaum  and countless others.  Jewsish students were at Rice from its founding.
  ![photo] (https://ricehistorycorner.files.wordpress.com/2012/08/menorah-society-1916.jpg)
 
@@ -397,6 +407,7 @@ There is a symbiotic relationship between kosher food establishments and Jewish 
 - zoom: 12
 ```
 #### 0
+#### 3
 ##### 1
 On May 25-26, 2015, a major storm and flood devastated much of the state of Texas.  The Houston area received up to 10 inches of rain in a 24 hour period.  In addition to the rain, the southwest part of Houston was inundated when the Brays Bayou overflowed its banks.  Hundreds of homes and businesses were ruined and families evacuated.   A few lives were lost.  
 
@@ -415,6 +426,7 @@ The accompanying map depicts the locations of all Kosher restaurants and groceri
 ```
 #### 0
 #### 1
+##### 3
 The flood of May, 2015, may have created challenges to the sustainability of the kosher businesses and Jewish community due to direct impacts of the flood as well as temporary or permanent relocation of the population.  Many homes are still in the process of repair or are being sold.  One grocery with significant kosher selection, the HEB at Chimney Rock, was completely closed for many months following the floods.  It was not determined if any others had also closed for any significant periods of time. 
  ![photo](http://thebuzzmagazines.com/sites/default/files/article-photos/2015/05/flood%204.jpg) 
 
